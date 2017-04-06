@@ -15,10 +15,13 @@ classdef post_data < handle
         last_judgement % judgement date
         audience % intended audience (national, constituency)
         audience_confidence % 0.5-1.0 ranking of audience classification confidence
+        audience_labels % list of possible audience labels (national, constituency)
         bias % partisan or neutral
         bias_confidence % 0.5-1.0 ranking of bias classification confidence
+        bias_labels % list of possible bias labels (partisan, neutral)
         message % classification of message 
         message_confidence % see above
+        message_labels % list of possible message labels
         label % info on poster
         source % twitter or facebook
         text % text of post
@@ -118,6 +121,12 @@ classdef post_data < handle
             [obj.wordCounts,I] = sort(wordCounts_u,'descend');
             obj.wordList = wordList_u(I);
             obj.numWords = length(obj.wordList);
+            
+            % get labels for all categories
+            obj.audience_labels = unique(obj.audience(:));
+            obj.bias_labels = unique(obj.bias(:));
+            obj.message_labels = unique(obj.message(:));
+            
         end
         
         function calc_tdm(obj)
@@ -135,8 +144,16 @@ classdef post_data < handle
             end
         end
         
-        function a = tdm_by_label(obj,mes)
+        function a = tdm_by_message(obj,mes)
             idx = strcmpi(mes,obj.message);
+            a = obj.tdm(:,idx);
+        end
+        function a = tdm_by_audience(obj,mes)
+            idx = strcmpi(mes,obj.audience);
+            a = obj.tdm(:,idx);
+        end
+        function a = tdm_by_bias(obj,mes)
+            idx = strcmpi(mes,obj.bias);
             a = obj.tdm(:,idx);
         end
     end
