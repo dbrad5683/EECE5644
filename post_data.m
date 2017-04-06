@@ -148,13 +148,26 @@ classdef post_data < handle
             idx = strcmpi(mes,obj.message);
             a = obj.tdm(:,idx);
         end
+        
         function a = tdm_by_audience(obj,mes)
             idx = strcmpi(mes,obj.audience);
             a = obj.tdm(:,idx);
         end
+        
         function a = tdm_by_bias(obj,mes)
             idx = strcmpi(mes,obj.bias);
             a = obj.tdm(:,idx);
+        end
+        
+        function [trainIdx,testIdx] = get_train_idx(obj,numTrain,numTest)
+            if numTrain+numTest~=obj.N
+                error('numTrain+numTest must equal N, dummy');
+            end
+            % training indices
+            trainIdx = [ones(numTrain,1); zeros(numTest,1)];
+            trainIdx = trainIdx(randperm(obj.N));
+            % testing indices
+            testIdx = ones(obj.N,1)-trainIdx;
         end
     end
     
