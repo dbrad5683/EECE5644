@@ -1,0 +1,20 @@
+clear; clc; close all;
+%% load data class
+addpath('~/Documents/Northeastern/2017S/EECE5644/project/EECE5644');
+load('~/Documents/Northeastern/2017S/EECE5644/project/EECE5644/dataset.mat');
+%% separate test/train
+[trainIdx,testIdx] = dataset.get_train_idx(4000,1000);
+trainTDM = dataset.tdm(:,trainIdx);
+trainMes = dataset.message(trainIdx);
+testTDM = dataset.tdm(:,testIdx);
+testMes = dataset.message(testIdx);
+%% separate training data into classes
+K = length(dataset.message_labels);
+classTDM = cell(K,1);
+classMeans = zeros(
+for ii=1:K
+    currMes = dataset.message_labels{ii};
+    idx = strcmpi(dataset.message_labels{ii},trainMes);
+    classTDM{ii} = trainTDM(idx);
+end
+%% get class parameters

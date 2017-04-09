@@ -165,9 +165,9 @@ classdef post_data < handle
             end
             % training indices
             trainIdx = [ones(numTrain,1); zeros(numTest,1)];
-            trainIdx = trainIdx(randperm(obj.N));
+            trainIdx = logical(trainIdx(randperm(obj.N)));
             % testing indices
-            testIdx = ones(obj.N,1)-trainIdx;
+            testIdx = logical(ones(obj.N,1)-trainIdx);
         end
     end
     
