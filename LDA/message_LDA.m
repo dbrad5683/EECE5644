@@ -24,8 +24,12 @@ T = U(:,1:dim);
 trainTDM = T'*trainTDM_dm;
 testTDM = T'*testTDM_dm;
 %% visualize
-figure;
-scatter(
+figure; hold on;
+idx = cell(K,1);
+for ii=1:K
+    idx{ii} = strcmpi(dataset.message_labels{ii},dataset.message(trainIdx));
+    scatter(trainTDM(1,idx{ii}),trainTDM(2,idx{ii}));
+end
 %% separate training data into and estimating parameters
 disp('estimating parameters');
 K = length(dataset.message_labels);
