@@ -11,16 +11,17 @@ trainMes = dataset.message(trainIdx);
 testTDM_full = dataset.tdm(:,testIdx);
 testMes = dataset.message(testIdx);
 dimFull = size(trainTDM_full,1);
+K = length(dataset.message_labels);
 %% de-mean everything
 trainMean = mean(trainTDM_full,2);
 trainTDM_dm = trainTDM_full - repmat(trainMean,1,numTrain);
 testTDM_dm = testTDM_full - repmat(trainMean,1,numTest);
 %% calculate SVD and transform data
 disp('SVD');
-[U,S,V] = svd(trainTDM_dm,'econ');
-%% tranform data
 dim = numTrain;
-T = U(:,1:dim);
+[U,S,V] = svds(trainTDM_dm,dim);
+%% tranform data
+T = U*S;
 trainTDM = T'*trainTDM_dm;
 testTDM = T'*testTDM_dm;
 %% visualize
@@ -32,7 +33,6 @@ for ii=1:K
 end
 %% separate training data into and estimating parameters
 disp('estimating parameters');
-K = length(dataset.message_labels);
 classTDM = cell(K,1);
 classMeans = zeros(dim,K);
 classCovs = zeros(dim,dim,K);
