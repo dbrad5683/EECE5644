@@ -14,13 +14,23 @@ testMes = dataset.message(testIdx);
 testBias = dataset.bias(testIdx);
 dimFull = size(trainTDM_full,1);
 K = length(dataset.bias_labels);
-%% remove words that only appear once
+%% find words taht only appear once
 min_freq = 2;
-trainTDM_red = trainTDM_full(dataset.wordCounts > min_freq,:);
-testTDM_red = testTDM_full(dataset.wordCounts > min_freq,:);
+minIdx = dataset.wordCounts > min_freq;
+%% find most common words to ignore
+load('../100_most_common_words.mat');
+comIdx = zeros(dataset.numWords,100);
+for ii=1:length(most_common)
+    comIdx(:,ii) = strcmpi(most_common{ii},dataset.wordList);
+end
+comIdx = sum(comIdx,2);
+%% remove words
+remIdx = minIdx|comIdx;
+trainTDM_red = trainTDM_full(remIdx,:);
+testTDM_red = testTDM_full(remIdx,:);
 dimRed = size(trainTDM_red,1);
 %% train LDA
-[w,backgroundMeans,trainMean,T] = train_LDA(trainTDM_red,trainBias,dataset.bias_labels,200);
+[w,backgroundMeans,trainMean,T] = train_LDA(trainTDM_red,trainBias,dataset.bias_labels,2000);
 %% test points
 out = test_LDA(testTDM_red,w,backgroundMeans,trainMean,T,K);
 %% results
