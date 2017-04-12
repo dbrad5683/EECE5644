@@ -15,8 +15,9 @@ testBias = dataset.bias(testIdx);
 dimFull = size(trainTDM_full,1);
 K = length(dataset.bias_labels);
 %% remove words that only appear once
-trainTDM_red = trainTDM_full(dataset.wordCounts ~= 1,:);
-testTDM_red = testTDM_full(dataset.wordCounts ~= 1,:);
+min_freq = 2;
+trainTDM_red = trainTDM_full(dataset.wordCounts > min_freq,:);
+testTDM_red = testTDM_full(dataset.wordCounts > min_freq,:);
 dimRed = size(trainTDM_red,1);
 %% train LDA
 [w,backgroundMeans,trainMean,T] = train_LDA(trainTDM_red,trainBias,dataset.bias_labels,200);
