@@ -8,8 +8,15 @@ function [w,backgroundMeans,trainMean,T] = train_LDA(trainTDM_full,trainLabels,l
     disp('SVD');
     [U,S,~] = svds(trainTDM_dm,dim);
     %% tranform data
-    T = U*S;
+    T = U;
     trainTDM = T'*trainTDM_dm;
+    %% visualize
+    figure;
+    hold on;
+    for ii=1:K
+        idx = strcmpi(labels{ii},trainLabels);
+        scatter3(trainTDM(1,idx),trainTDM(2,idx),trainTDM(3,idx));
+    end
     %% separate training data into and estimating parameters
     disp('estimating parameters');
     classTDM = cell(K,1);
