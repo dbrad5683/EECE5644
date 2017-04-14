@@ -14,13 +14,13 @@ numTest = dataset.N - numTrain;
 [trainIdx, testIdx] = dataset.get_train_idx(numTrain, numTest);
 
 trainTDM_full = dataset.tdm(:, trainIdx);
-trainBias = dataset.bias(trainIdx);
+trainMessage = dataset.message(trainIdx);
 
 testTDM_full = dataset.tdm(:, testIdx);
-testBias = dataset.bias(testIdx);
+testMessage = dataset.message(testIdx);
 
 dimFull = size(trainTDM_full, 1);
-K = length(dataset.bias_labels);
+K = length(dataset.message_labels);
 
 %% Find words that only appear once
 min_freq = 2;
@@ -42,12 +42,12 @@ dimRed = size(trainTDM_red, 1);
 
 %% Train PCA
 min_var_ratio = 1; % Set this in (0:1] to reduce dataset dimensionality
-class_tdm = train_pca(trainTDM_red, trainBias, dataset.bias_labels, min_var_ratio);
+class_tdm = train_pca(trainTDM_red, trainMessage, dataset.message_labels, min_var_ratio);
 
 %% Test points
 estimated_labels = test_pca(testTDM_red, class_tdm, K);
 
-%% results
-outLabel = dataset.bias_labels(estimated_labels);
-results = strcmpi(outLabel, testBias);
+%% Results
+outLabel = dataset.message_labels(estimated_labels);
+results = strcmpi(outLabel, testMessage);
 acc = sum(results) / numTest
