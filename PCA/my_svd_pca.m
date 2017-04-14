@@ -1,4 +1,4 @@
-function [Y, C, V] = my_svd_pca(X)
+function [Y, C, V, mu] = my_svd_pca(X)
 % my_svd_pca: Performs PCA using SVD.
 %
 %   X - MxN matrix of observed data (M variables, N observations)
@@ -10,6 +10,8 @@ function [Y, C, V] = my_svd_pca(X)
 %       variance
 %
 %   V = Mx1 vector of variances
+%
+%   mu = Mx1 Sample mean of data
 %
 
     % Determine the size of the data
