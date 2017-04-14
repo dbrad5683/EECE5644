@@ -23,6 +23,7 @@ function [Y, C, V] = my_svd_pca(X)
     
     % Construct the matrix Z
     Z = (1/sqrt(N)) * X';
+    %Z = (1/sqrt(N)) * X;
     
     % Perform SVD on Z
     [~, S, C] = svd(Z);
@@ -32,5 +33,6 @@ function [Y, C, V] = my_svd_pca(X)
     
     % Project original data onto principal components
     Y = C' * X;
+    %Y = X * C;
     
 end
