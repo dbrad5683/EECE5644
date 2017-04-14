@@ -7,9 +7,11 @@ function estimated_labels = test_pca(test_tdm, class_tdm, K)
     
     for i = 1:K
         
-        test_tdm_centered = test_tdm - repmat(class_tdm{i}.mu, 1, N);
+        M = class_tdm{i}.M_red;
         
-        Y = class_tdm{i}.pc' * test_tdm_centered(1:class_tdm{i}.M_red, :);
+        test_tdm_centered = test_tdm(1:M, :) - repmat(class_tdm{i}.mu(1:M), 1, N);
+        
+        Y = class_tdm{i}.pc' * test_tdm_centered;
         dist = sqrt(sum(Y.^2, 1));
         
         idx = dist < lse;
