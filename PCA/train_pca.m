@@ -26,9 +26,9 @@ function class_tdm = train_pca(train_tdm, train_labels, labels, min_var_ratio)
             
         end
         
-        class_tdm{i}.proj = proj(1:M_red, :);
-        class_tdm{i}.pc = pc(1:M_red, :);
-        class_tdm{i}.mu = mu(1:M_red);
+        class_tdm{i}.proj = proj;
+        class_tdm{i}.pc = pc;
+        class_tdm{i}.mu = mu;
         class_tdm{i}.M_red = M_red;
         
     end

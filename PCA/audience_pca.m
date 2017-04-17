@@ -41,7 +41,7 @@ testTDM_red = testTDM_full(remIdx, :);
 dimRed = size(trainTDM_red, 1);
 
 %% Train PCA
-min_var_ratio = 1; % Set this in (0:1] to reduce dataset dimensionality
+min_var_ratio = 0.9; % Set this in (0:1] to reduce dataset dimensionality
 class_tdm = train_pca(trainTDM_red, trainAudience, dataset.audience_labels, min_var_ratio);
 
 %% Test points

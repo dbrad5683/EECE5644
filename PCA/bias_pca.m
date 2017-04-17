@@ -41,13 +41,33 @@ testTDM_red = testTDM_full(remIdx, :);
 dimRed = size(trainTDM_red, 1);
 
 %% Train PCA
-min_var_ratio = 1; % Set this in (0:1] to reduce dataset dimensionality
+min_var_ratio = 0.9; % Set this in (0:1] to reduce dataset dimensionality
 class_tdm = train_pca(trainTDM_red, trainBias, dataset.bias_labels, min_var_ratio);
 
 %% Test points
-estimated_labels = test_pca(testTDM_red, class_tdm, K);
+[estimated_labels, class_mse] = test_pca(testTDM_red, class_tdm, K);
 
 %% results
 outLabel = dataset.bias_labels(estimated_labels);
 results = strcmpi(outLabel, testBias);
 acc = sum(results) / numTest
+
+bias = zeros(2, numTest);
+bias(1, :) = strcmpi(testBias, 'partisan')';
+bias(2, :) = strcmpi(testBias, 'neutral')';
+
+label = zeros(2, numTest);
+label(1, :) = strcmpi(outLabel, 'partisan')';
+label(2, :) = strcmpi(outLabel, 'neutral')';
+
+plotconfusion(bias, label);
+
+figure();
+histogram(class_mse{1}(class_mse{1} < 50))
+hold on;
+histogram(class_mse{2}(class_mse{2} < 50))
+legend([dataset.bias_labels(1), dataset.bias_labels(2)])
+title('Histogram for Bias Labels')
+ylabel('Frequency')
+xlabel('Mean Squared Error')
+axis square
